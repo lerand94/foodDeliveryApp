@@ -13,7 +13,7 @@ const Header = () => {
         <HeaderCartButton />
       </header>
       <div className={classes["main-image"]}>
-        <img src={mealsImg} />
+        <img src={mealsImg} alt="background" />
       </div>
     </React.Fragment>
   );
