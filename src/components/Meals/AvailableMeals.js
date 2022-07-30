@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMeals = async () => {
@@ -13,6 +14,10 @@ const AvailableMeals = () => {
         "https://fooddelivery-ef190-default-rtdb.firebaseio.com/meals.json\n" +
           "\n"
       );
+      if (!response.ok) {
+        throw new Error("Smth went wrong!");
+      }
+
       const data = await response.json();
 
       const loadedMeals = [];
@@ -30,13 +35,24 @@ const AvailableMeals = () => {
       setIsLoading(false);
     };
 
-    fetchMeals();
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
   }, []);
 
   if (isLoading) {
     return (
       <section className={classes.MealsLoading}>
         <p>Loading...</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className={classes.MealsError}>
+        <p>{error}</p>
       </section>
     );
   }
